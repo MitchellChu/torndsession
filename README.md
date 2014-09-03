@@ -7,10 +7,10 @@ Torndsession support application memory, file, redis or memcached to save sessio
 Quick links
 ===========
 
-* `[Documentation](http://blog.useasp.net/category/30.aspx)`_
-* `[Source(github)](https://github.com/MitchellChu/torndsession)`_
-* `[License](https://raw.githubusercontent.com/MitchellChu/torndsession/master/LICENSE)`_
-* `[Examples](https://github.com/MitchellChu/torndsession/tree/master/demos)`_
+* [Documentation](http://blog.useasp.net/category/30.aspx)
+* [Source(github)](https://github.com/MitchellChu/torndsession)
+* [License](https://raw.githubusercontent.com/MitchellChu/torndsession/master/LICENSE)
+* [Examples](https://github.com/MitchellChu/torndsession/tree/master/demos)
 
 
 Hello, Session
