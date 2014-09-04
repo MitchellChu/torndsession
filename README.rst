@@ -72,7 +72,7 @@ Installation
 
     pip install torndsession
 
-Torndsession is listed in `PyPI <https://pypi.python.org/pypi/torndsession>`_ and can be installed with `pip`or `easy_install`. Note that this installation can not install demos applicatinos which be included in source code.
+Torndsession is listed in `PyPI <https://pypi.python.org/pypi/torndsession>`_ and can be installed with `pip` or `easy_install`. Note that this installation can not install demos applicatinos which be included in source code.
 
 **Manual installation**:
 
