@@ -3,4 +3,8 @@
 *.pyo
 *.so
 *.class
-
+build/
+/dist/
+/torndsession.egg-info/
+.tox/
+/env/
