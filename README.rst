@@ -36,11 +36,6 @@ Here is a simple "Hello, Session" example web app for Tornado with Torndsession.
 	    settings = dict(
 	        debug = True,
 	    )
-	    session_settings = dict(
-	        driver = "memory",
-		driver_settings = {'host':self,},
-	    )
-	    settings.update(session = session_settings)
 	    tornado.web.Application.__init__(self, handlers, **settings)
 
     class MainHandler(torndsession.sessionhandler.SessionBaseHandler):
@@ -51,7 +46,7 @@ Here is a simple "Hello, Session" example web app for Tornado with Torndsession.
 	    else:
 	        data = 0
 	    self.write('data=%s' % data)
-	    self.session["autoincrement"] = data + 1
+	    self.session["data"] = data + 1
 
 
     def main():
