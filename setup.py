@@ -18,8 +18,8 @@ def read(*filenames, **kwargs):
             buf.append(f.read())
     return sep.join(buf)
 
-version = '1.1.devl'
-long_description = read("README.md")
+version = '1.1.1'
+long_description = read("README.rst")
 
 setup(
     name = 'torndsession',
@@ -27,10 +27,9 @@ setup(
     description = "Session extensions for Tornado",
     long_description = long_description,
     classifiers=[
-        'License :: OSI Approved :: MIT software license',
+        'License :: OSI Approved :: MIT License',
         'Topic :: Internet :: WWW/HTTP :: Session',
         'Programming Language :: Python',
-        'Framework :: Tornado',
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
         'Operating System :: OS Independent',
@@ -43,5 +42,5 @@ setup(
     packages = ["torndsession"],
     include_package_data=True,
     zip_safe=True,
-    # install_requires=['tornado',],
+    install_requires=['tornado',],
 )
