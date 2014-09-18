@@ -37,14 +37,6 @@ class SessionManager(object):
                                     **self.__session_settings())
             self._is_dirty = True
             self.session = {}
-            cookie_config = self.settings.get("cookie_config")
-            if cookie_config:
-                expires = cookie_config.get("expires")
-                expires_days = cookie_config.get("expires_days")
-                if expires_days is not None and not expires:
-                    expires = datetime.datetime.utcnow() + datetime.timedelta(days = expires_days)
-                if expires and isinstance(expires, datetime.datetime):
-                    self._expires = expires
         else:
             self.session = self.__get_session_object_from_driver(session_id)
             if not self.session:
@@ -52,7 +44,14 @@ class SessionManager(object):
                 self._is_dirty = True
             else:
                 self._is_dirty = False
-            self._expires = self.session.get("__expires__")
+        cookie_config = self.settings.get("cookie_config")
+        if cookie_config:
+            expires = cookie_config.get("expires")
+            expires_days = cookie_config.get("expires_days")
+            if expires_days is not None and not expires:
+                expires = datetime.datetime.utcnow() + datetime.timedelta(days = expires_days)
+            if expires and isinstance(expires, datetime.datetime):
+                self._expires = expires
         self._expires = self._expires if self._expires else self._default_session_lifetime
         self._id = session_id
 

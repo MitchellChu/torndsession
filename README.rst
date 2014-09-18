@@ -2,7 +2,7 @@ Torndsession Session
 ====================
 
 
-`Torndsession <https://github.com/MitchellChu/torndsession>`_ is a session extension for `Tornado <https://github.com/tornadoweb/tornado>`_ web framework.
+`Torndsession <https://github.com/MitchellChu/torndsession>`_ is a session extension for `Tornado <https://github.com/tornadoweb/tornado>`__ web framework.
 Torndsession support application memory, file, redis or memcached to save session data for request, and it's easy to extend for developer.
 
 Quick links
@@ -12,7 +12,7 @@ Quick links
   
 * `Source (github) <https://github.com/MitchellChu/torndsession>`_
   
-* `License <https://raw.githubusercontent.com/MitchellChu/torndsession/master/LICENSE>`_
+* `Torndsession License <https://raw.githubusercontent.com/MitchellChu/torndsession/master/LICENSE>`_
   
 * `Examples <https://github.com/MitchellChu/torndsession/tree/master/demos>`_
 
@@ -72,11 +72,11 @@ Installation
 
     pip install torndsession
 
-Torndsession is listed in `PyPI <https://pypi.python.org/pypi/torndsession>`_ and can be installed with `pip` or `easy_install`. Note that this installation can not install demos applicatinos which be included in source code.
+Torndsession is listed in `PyPI <https://pypi.python.org/pypi/torndsession>`__ and can be installed with `pip` or `easy_install`. Note that this installation can not install demos applicatinos which be included in source code.
 
 **Manual installation**:
 
-In this way, you need download the source from `PyPI <https://pypi.python.org/pypi/torndsession>`_.::
+In this way, you need download the source from `PyPI <https://pypi.python.org/pypi/torndsession>`__.::
 
     tar xvzf torndsession.tar.gz
     cd torndsession
@@ -91,7 +91,7 @@ Requires
 ========
 
 
-+ `Tornado <https://github.com/tornadoweb/tornado>`_
++ `Tornado <https://github.com/tornadoweb/tornado>`__
 + `Redis (Optional) <http://redis.io/>`_
 + `Memcached (Optional) <http://memcached.org/>`_
 
