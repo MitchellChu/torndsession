@@ -8,6 +8,8 @@ try:
     from setuptools import setup
 except:
     from distutils.core import setup
+import torndsession
+
 
 def read(*filenames, **kwargs):
     encoding= kwargs.get('encoding', 'utf-8')
@@ -18,7 +20,7 @@ def read(*filenames, **kwargs):
             buf.append(f.read())
     return sep.join(buf)
 
-version = '1.1.1'
+version = torndsession.version
 long_description = read("README.rst")
 
 setup(
