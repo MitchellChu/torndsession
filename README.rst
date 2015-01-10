@@ -86,6 +86,11 @@ In this way, you need download the source from `PyPI <https://pypi.python.org/py
 The Torndsession source code is hosted on `GitHub <https://github.com/MitchellChu/torndsession>`_.
 
 
+Updated
+=======
+
+Torndsession 1.1.3 fixed some bug and supported python 3.x.
+
 
 Requires
 ========
@@ -94,6 +99,7 @@ Requires
 + `Tornado <https://github.com/tornadoweb/tornado>`__
 + `Redis (Optional) <http://redis.io/>`_
 + `Memcached (Optional) <http://memcached.org/>`_
+
 
 
 LICENSE

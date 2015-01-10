@@ -4,18 +4,20 @@
 # Copyright @ 2014 Mitchell Chu
 # 
 
+from __future__ import absolute_import, division, print_function, with_statement
+
+
 from uuid import uuid4
-from driver import SessionDriverFactory
+from torndsession.driver import SessionDriverFactory
 import datetime
 try:
-    import cPickle as pickle #py2
+    import cPickle as pickle    # py2
 except ImportError:
-    import pickle #py3
+    import pickle               # py3
 
 
 class SessionManager(object):
-    '''
-    '''
+
     SESSION_ID = 'msid'
     DEFAULT_SESSION_LIFETIME = 1200 # seconds
     
@@ -26,7 +28,7 @@ class SessionManager(object):
         self._expires = self._default_session_lifetime
         self._is_dirty = True
         self.__init_session_driver()
-        self.__init_session_object() # 初始化Session对象
+        self.__init_session_object() # initialize session object
 
     def __init_session_object(self):
         session_id = self.handler.get_cookie(self.SESSION_ID)
@@ -138,15 +140,15 @@ class SessionManager(object):
         return self.driver.get(session_id)
 
     def get(self, key, default=None):
-        '''
+        """
         Return session value with name as key.
-        '''
+        """
         return self.session.get(key, default)
 
     def set(self, key, value):
-        '''
+        """
         Add/Update session value
-        '''
+        """
         self.session[key]=value
         self._is_dirty = True
         force_update = self.settings.get("force_persistence")
@@ -155,9 +157,9 @@ class SessionManager(object):
             self._is_dirty = False
 
     def delete(self, key):
-        '''
+        """
         Delete session key-value pair
-        '''
+        """
         if self.session.has_key(key):
             del self.session[key]
             self._is_dirty = True
@@ -172,9 +174,9 @@ class SessionManager(object):
     __iter__ = iterkeys
 
     def keys(self):
-        '''
+        """
         Return all keys in session object
-        '''
+        """
         return self.session.keys()
 
     def flush(self):
@@ -193,15 +195,13 @@ class SessionManager(object):
         raise KeyError('%s not found' % key) 
 
     def __contains__(self, key):
-        '''
-        '''
         return key in self.session
 
     @property
     def id(self):
-        '''
+        """
         Return current session id
-        '''
+        """
         if not hasattr(self, '_id'):
             self.__init_session_object()
         return self._id
@@ -217,9 +217,9 @@ class SessionManager(object):
         return self._expires
 
     # def __generate_session_id(self):
-    #     '''
+    #     """
     #     Generate unique session id by uuid4
-    #     '''
+    #     """
     #     session_id = uuid4().hex
     #     self.handler.set_cookie(self.SESSION_ID,
     #                             session_id,
@@ -237,20 +237,18 @@ class SessionManager(object):
     #     if session_id:return session_id
     #     return self.__generate_session_id()
 
+
 class SessionMixin(object):
-    '''
-    '''
-    
+
     @property
     def session(self):
-        '''
-        '''
         return self._create_mixin(self, '__session_manager', SessionManager)
 
     def _create_mixin(self, context, inner_property_name, session_handler):
         if not hasattr(context, inner_property_name):
             setattr(context, inner_property_name, session_handler(context))
         return getattr(context, inner_property_name)
+
 
 class SessionConfigurationError(Exception):
     pass

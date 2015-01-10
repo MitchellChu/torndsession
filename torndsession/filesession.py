@@ -3,22 +3,25 @@
 #
 # Copyright @ 2014 Mitchell Chu
 
-from driver import SessionDriver
-from session import SessionConfigurationError
+from __future__ import absolute_import, division, print_function, with_statement
+
+from torndsession.driver import SessionDriver
+from torndsession.session import SessionConfigurationError
 import os
 from os.path import join, exists, isdir
 import datetime
 utcnow = datetime.datetime.utcnow
 try:
-    import cPickle as pickle    # py2
+    import cPickle as pickle    #  py2
 except:
-    import pickle               # py3
+    import pickle               #  py3
+
 
 class FileSession(SessionDriver):
     """
     System File to save session object.
     """
-    DEFAULT_SESSION_POSITION = './#_sessions' # default host is '#_sessions' directory which is in current directory.
+    DEFAULT_SESSION_POSITION = './#_sessions'  #  default host is '#_sessions' directory which is in current directory.
     """
     Session file default save position.
     In a recommendation, you need give the host option.when host is missed, system will use this value by default.
@@ -38,7 +41,7 @@ class FileSession(SessionDriver):
         self.host = settings.get("host", self.DEFAULT_SESSION_POSITION)
         self._prefix = settings.get("prefix", 'default')
         if not exists(self.host):
-            os.makedirs(self.host, 0700) # only owner can visit this session directory.
+            os.makedirs(self.host, 0700)  #  only owner can visit this session directory.
         if not isdir(self.host):
             raise SessionConfigurationError('session host not found')
 

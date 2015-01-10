@@ -8,6 +8,7 @@ import tornado.httpserver
 import tornado.ioloop
 from torndsession.sessionhandler import SessionBaseHandler
 
+
 class Application(tornado.web.Application):
     def __init__(self):
         handlers = [
@@ -26,15 +27,16 @@ class Application(tornado.web.Application):
         settings.update(session=session_settings)
         tornado.web.Application.__init__(self, handlers, **settings)
 
+
 class MainHandler(SessionBaseHandler):
     def get(self):
         self.write("File Session Example:<br/>")
-        print self.session.keys()
+        # print self.session.keys()
         if "sv" in self.session:
-            print 'sv in session'
+            self.write('sv in session<br/>')
             sv = self.session["sv"]
         else:
-            print 'sv not in session'
+            self.write('sv not in session<br/>')
             sv = 0
         if sv == None:
             sv = 0
@@ -42,6 +44,7 @@ class MainHandler(SessionBaseHandler):
             sv = int(sv) + 1
         self.write('Current Session Value:%d' % sv)
         self.session["sv"] = sv
+
 
 def main():
     http_server = tornado.httpserver.HTTPServer(Application())

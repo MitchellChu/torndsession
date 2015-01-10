@@ -8,10 +8,12 @@ import tornado.httpserver
 import tornado.ioloop
 from torndsession.sessionhandler import SessionBaseHandler
 
+
 class Application(tornado.web.Application):
     def __init__(self):
         handlers=[
             (r'/', MainHandler),
+            (r'/del', DeleteHandler),
         ]
         settings = dict(
             debug = True,
@@ -26,20 +28,39 @@ class Application(tornado.web.Application):
         settings.update(session=session_settings)
         tornado.web.Application.__init__(self, handlers=handlers, **settings)
 
+
 class MainHandler(SessionBaseHandler):
     def get(self):
-        self.write("Memory Session Object Demo:")
+        self.write("Memory Session Object Demo:<br/>")
         if "sv" in self.session:
             current_value = self.session["sv"]
         else:
             current_value = 0
         if not current_value:
-            print 'current_value is None'
+            self.write("current_value is None(0)<br/>")
             current_value = 1
         else:
             current_value = int(current_value) + 1
         self.write('<br/> Current Value is: %d' % current_value)
         self.session["sv"] = current_value
+
+
+class DeleteHandler(SessionBaseHandler):
+    def get(self):
+        '''
+        Please don't do this in production environments.
+        '''
+        self.write("Memory Session Object Demo:")
+        if "sv" in self.session:
+            current_value = self.session["sv"]
+            self.write("current sv value is %s, and system will delete this value.<br/>" % self.session["sv"])
+            self.session.delete("sv")
+            if "sv" not in self.session:
+                self.write("current sv value is empty")
+        else:
+            self.write("Session data not found")
+        
+
 
 def main():
     http_server = tornado.httpserver.HTTPServer(Application())

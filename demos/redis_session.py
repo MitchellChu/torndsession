@@ -9,6 +9,7 @@ import tornado.ioloop
 
 from torndsession.sessionhandler import SessionBaseHandler
 
+
 class Application(tornado.web.Application):
     def __init__(self):
         handlers = [
@@ -29,6 +30,7 @@ class Application(tornado.web.Application):
         settings.update(session = session_settings)
         tornado.web.Application.__init__(self, handlers, **settings)
 
+
 class MainHandler(SessionBaseHandler):
     def get(self):
         self.write("Redis Session Example:<br/>")
@@ -38,6 +40,7 @@ class MainHandler(SessionBaseHandler):
             sv = 0
         self.write('Current Session Value:%s' % sv)
         self.session['sv'] = sv + 1
+
 
 def main():
     http_server = tornado.httpserver.HTTPServer(Application())

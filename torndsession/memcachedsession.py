@@ -3,7 +3,9 @@
 #
 # Copyright @ 2014 Mitchell Chu
 
-from driver import SessionDriver
+from __future__ import absolute_import, division, print_function, with_statement
+
+from torndsession.driver import SessionDriver
 # from session import SessionConfigurationError
 import memcache
 import datetime
@@ -19,6 +21,7 @@ NOTICE:
 This session extension was not be tested.
 you must test all functions before use.
 """
+
 
 class MemcachedSession(SessionDriver):
     """
@@ -39,7 +42,7 @@ class MemcachedSession(SessionDriver):
     def save(self, session_id, session_data, expires=None):
         session_data = session_data if session_data else {}
         if expires:
-            session_data.update(__expires__ = expires)
+            session_data.update(__expires__=expires)
         mem_data = pickle.dumps(session_data)
         expires = self.__get_expires_seconds(expires)
         self.client.set(session_id, mem_data, expires)
