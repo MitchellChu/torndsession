@@ -26,7 +26,7 @@ Here is a simple "Hello, Session" example web app for Tornado with Torndsession.
     import tornado.web
     import tornado.httpserver
     import tornado.ioloop
-    import torndosession
+    import torndsession
 
     class Application(tornado.web.Application):
         def __init__(self):
