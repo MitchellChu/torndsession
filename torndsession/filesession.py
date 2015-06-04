@@ -9,6 +9,7 @@ from torndsession.driver import SessionDriver
 from torndsession.session import SessionConfigurationError
 import os
 from os.path import join, exists, isdir
+import sys
 import datetime
 utcnow = datetime.datetime.utcnow
 try:
@@ -41,7 +42,8 @@ class FileSession(SessionDriver):
         self.host = settings.get("host", self.DEFAULT_SESSION_POSITION)
         self._prefix = settings.get("prefix", 'default')
         if not exists(self.host):
-            os.makedirs(self.host, 0700)  #  only owner can visit this session directory.
+            os.makedirs(self.host, 448)  #  only owner can visit this session directory.
+
         if not isdir(self.host):
             raise SessionConfigurationError('session host not found')
 
@@ -49,9 +51,9 @@ class FileSession(SessionDriver):
         session_file = join(self.host, self._prefix + session_id)
         if not exists(session_file): return {}
 
-        rf = file(session_file, 'rb')
-        session = pickle.load(rf)
-        rf.close()
+        with open(session_file, 'rb') as rf:
+            session = pickle.load(rf)
+
         now = utcnow()
         expires = session.get('__expires__', now)
         if expires >= now:
@@ -64,9 +66,8 @@ class FileSession(SessionDriver):
 
         if not expires:
             session_data.update("__expires__", expires)
-        wf = file(session_file, 'wb')
-        pickle.dump(session_data, wf)
-        wf.close()
+        with open(session_file, 'wb') as wf:
+            pickle.dump(session_data, wf)
 
     def clear(self, session_id):
         session_file = join(self.host, self._prefix + session_id)
