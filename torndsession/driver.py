@@ -4,6 +4,7 @@
 # Copyright @ 2014 Mitchell Chu
 
 from __future__ import absolute_import, division, print_function, with_statement
+import sys
 
 
 class SessionDriver(object):
@@ -33,7 +34,7 @@ class SessionDriverFactory(object):
     @staticmethod
     def create_driver(driver, **setings):
         module_name = 'torndsession.%ssession' % driver.lower()
-        module = __import__(module_name, globals(), locals(), ['object'], -1)
+        module = __import__(module_name, globals(), locals(), ['object'])
         # must use this form.
         # use __import__('torndsession.' + driver.lower()) just load torndsession.__init__.pyc
         cls = getattr(module, '%sSession' % driver.capitalize())
