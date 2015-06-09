@@ -160,7 +160,7 @@ class SessionManager(object):
         """
         Delete session key-value pair
         """
-        if self.session.has_key(key):
+        if key in self.session:
             del self.session[key]
             self._is_dirty = True
         force_update = self.settings.get("force_persistence")
