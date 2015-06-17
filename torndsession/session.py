@@ -167,7 +167,7 @@ class SessionManager(object):
         if force_update:
             self.driver.save(self._id, self.session, self._expires)
             self._is_dirty = False
-    __deleteitem__ = delete
+    __delitem__ = delete
 
     def iterkeys(self):
         return iter(self.session)
