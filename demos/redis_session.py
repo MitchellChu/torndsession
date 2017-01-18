@@ -16,18 +16,18 @@ class Application(tornado.web.Application):
             (r'/', MainHandler),
         ]
         settings = dict(
-            debug = True,
+            debug=True,
         )
         session_settings = dict(
-            driver = "redis",
-            driver_settings = dict(
-                host = 'localhost',
-                port = 6379,
-                db = 0,
-                max_connections = 1024,
+            driver="redis",
+            driver_settings=dict(
+                host='localhost',
+                port=6379,
+                db=0,
+                max_connections=1024,
             )
         )
-        settings.update(session = session_settings)
+        settings.update(session=session_settings)
         tornado.web.Application.__init__(self, handlers, **settings)
 
 

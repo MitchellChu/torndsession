@@ -15,14 +15,14 @@ class Application(tornado.web.Application):
             (r"/", MainHandler),
         ]
         settings = dict(
-            debug = True,
+            debug=True,
         )
         session_settings = dict(
-            driver = "file",
-            driver_settings = dict(
-                host = "#_sessions",
+            driver="file",
+            driver_settings=dict(
+                host="#_sessions",
             ),
-            force_persistence = True,
+            force_persistence=True,
         )
         settings.update(session=session_settings)
         tornado.web.Application.__init__(self, handlers, **settings)

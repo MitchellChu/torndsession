@@ -11,19 +11,19 @@ from torndsession.sessionhandler import SessionBaseHandler
 
 class Application(tornado.web.Application):
     def __init__(self):
-        handlers=[
+        handlers = [
             (r'/', MainHandler),
             (r'/del', DeleteHandler),
         ]
         settings = dict(
-            debug = True,
+            debug=True,
         )
         session_settings = dict(
             driver="memory",
             driver_settings=dict(
-                host = self,
+                host=self,
             ),
-            force_persistence = True,
+            force_persistence=True,
         )
         settings.update(session=session_settings)
         tornado.web.Application.__init__(self, handlers=handlers, **settings)
@@ -59,7 +59,6 @@ class DeleteHandler(SessionBaseHandler):
                 self.write("current sv value is empty")
         else:
             self.write("Session data not found")
-        
 
 
 def main():

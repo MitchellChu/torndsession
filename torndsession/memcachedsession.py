@@ -3,14 +3,17 @@
 #
 # Copyright @ 2014 Mitchell Chu
 
-from __future__ import absolute_import, division, print_function, with_statement
+from __future__ import (absolute_import, division, print_function,
+                        with_statement)
 
-from torndsession.driver import SessionDriver
-# from session import SessionConfigurationError
-import memcache
 import datetime
 import numbers
 from copy import copy
+
+from torndsession.driver import SessionDriver
+
+import memcache
+
 try:
     import cPickle as pickle    # py2
 except:
@@ -59,7 +62,7 @@ class MemcachedSession(SessionDriver):
         port = settings.pop('port', self.DEFAULT_MEMCACHED_PORT)
         servers = '%s:%s' % (host, port)
         return memcache.Client(servers, **settings)
-            
+
     def __get_expires_seconds(self, expires):
         if isinstance(expires, numbers.Real):
             return int(expires)

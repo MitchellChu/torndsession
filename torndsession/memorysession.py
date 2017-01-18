@@ -3,11 +3,13 @@
 #
 # Copyright @ 2014 Mitchell Chu
 
-from __future__ import absolute_import, division, print_function, with_statement
+from __future__ import (absolute_import, division, print_function,
+                        with_statement)
+
+import datetime
 
 from torndsession.driver import SessionDriver
 from torndsession.session import SessionConfigurationError
-import datetime
 
 
 class MemorySession(SessionDriver):
@@ -26,11 +28,11 @@ class MemorySession(SessionDriver):
         super(MemorySession, self).__init__(**settings)
         host = settings.get("host")
         if not host:
-            raise SessionConfigurationError('memory session driver can not found persistence position')
+            raise SessionConfigurationError(
+                'memory session driver can not found persistence position')
         if not hasattr(host, "session_container"):
             setattr(host, "session_container", {})
         self._data_handler = host.session_container
-        # init some thing 
 
     def get(self, session_id):
         """
@@ -51,12 +53,12 @@ class MemorySession(SessionDriver):
             self.remove_expires()
         if len(self._data_handler) >= self.MAX_SESSION_OBJECTS:
             print("system session pool is full. need more memory to save session object.")
-        self._data_handler[session_id]=session_data
+        self._data_handler[session_id] = session_data
 
     def clear(self, session_id):
         if self._data_handler.haskey(session_id):
             del self._data_handler[session_id]
-    
+
     def remove_expires(self):
         for key, val in self._data_handler.items():
             now = datetime.datetime.utcnow()

@@ -4,11 +4,13 @@
 # Copyright @ 2014 Mitchell Chu
 
 import io
+
+import torndsession
+
 try:
     from setuptools import setup
 except:
     from distutils.core import setup
-import torndsession
 
 
 def read(*filenames, **kwargs):
@@ -24,10 +26,10 @@ version = torndsession.version
 long_description = read("README.rst")
 
 setup(
-    name = 'torndsession',
-    version = version,
-    description = "Session extensions for Tornado",
-    long_description = long_description,
+    name='torndsession',
+    version=version,
+    description="Session extensions for Tornado",
+    long_description=long_description,
     classifiers=[
         'License :: OSI Approved :: MIT License',
         'Topic :: Internet :: WWW/HTTP :: Session',
@@ -41,7 +43,7 @@ setup(
     author_email="zxdjsj@126.com",
     url="http://github.com/mitchellchu/torndsession",
     license="MIT",
-    packages = ["torndsession"],
+    packages=["torndsession"],
     include_package_data=True,
     zip_safe=True,
     install_requires=['tornado',],

@@ -3,14 +3,17 @@
 #
 # Copyright @ 2014 Mitchell Chu
 
-from __future__ import absolute_import, division, print_function, with_statement
+from __future__ import (absolute_import, division, print_function,
+                        with_statement)
+
+import datetime
+import os
+import sys
+from os.path import exists, isdir, join
 
 from torndsession.driver import SessionDriver
 from torndsession.session import SessionConfigurationError
-import os
-from os.path import join, exists, isdir
-import sys
-import datetime
+
 utcnow = datetime.datetime.utcnow
 try:
     import cPickle as pickle    #  py2
@@ -49,7 +52,8 @@ class FileSession(SessionDriver):
 
     def get(self, session_id):
         session_file = join(self.host, self._prefix + session_id)
-        if not exists(session_file): return {}
+        if not exists(session_file):
+            return {}
 
         with open(session_file, 'rb') as rf:
             session = pickle.load(rf)
@@ -75,11 +79,11 @@ class FileSession(SessionDriver):
             os.remove(session_file)
 
     def remove_expires(self):
-        if not exists(self.host) or not isdir(self.host):return
+        if not exists(self.host) or not isdir(self.host): return
         now = utcnow()
-        for file in os.listdir(self.host):
-            if file.startswith(self._prefix):
-                session_file = join(self.host, file)
+        for session_file in os.listdir(self.host):
+            if session_file.startswith(self._prefix):
+                session_file = join(self.host, session_file)
                 f = open(session_file, 'rb')
                 session = pickle.load(f)
                 f.close()

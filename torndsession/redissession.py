@@ -3,13 +3,16 @@
 #
 # Copyright @ 2014 Mitchell Chu
 
-from __future__ import absolute_import, division, print_function, with_statement
+from __future__ import (absolute_import, division, print_function,
+                        with_statement)
+
+from copy import copy
+from datetime import datetime, timedelta
 
 from torndsession.driver import SessionDriver
-# from session import SessionConfigurationError 
+
 import redis
-from copy import copy
-from datetime import timedelta, datetime
+
 try:
     import cPickle as pickle    # py2
 except:
@@ -24,7 +27,8 @@ class RedisSession(SessionDriver):
     def get(self, session_id):
         self.__create_redis_client()
         session_data = self.client.get(session_id)
-        if not session_data: return {}
+        if not session_data:
+            return {}
         return pickle.loads(session_data)
 
     def save(self, session_id, session_data, expires=None):
@@ -36,7 +40,7 @@ class RedisSession(SessionDriver):
         self.client.set(session_id, session_data)
         if expires:
             delta_seconds = int((expires - datetime.utcnow()).total_seconds())
-            self.client.expire(session_id,delta_seconds)
+            self.client.expire(session_id, delta_seconds)
 
     def clear(self, session_id):
         self.__create_redis_client()

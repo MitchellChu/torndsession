@@ -3,7 +3,9 @@
 #
 # Copyright @ 2014 Mitchell Chu
 
-from __future__ import absolute_import, division, print_function, with_statement
+from __future__ import (absolute_import, division, print_function,
+                        with_statement)
+
 import sys
 
 
@@ -32,15 +34,17 @@ class SessionDriverFactory(object):
     use input settings to return suitable driver's instance
     '''
     @staticmethod
-    def create_driver(driver, **setings):
+    def create_driver(driver, **settings):
         module_name = 'torndsession.%ssession' % driver.lower()
         module = __import__(module_name, globals(), locals(), ['object'])
         # must use this form.
         # use __import__('torndsession.' + driver.lower()) just load torndsession.__init__.pyc
         cls = getattr(module, '%sSession' % driver.capitalize())
         if not 'SessionDriver' in [base.__name__ for base in cls.__bases__]:
-            raise InvalidSessionDriverException('%s not found in current driver implements ' % driver)
-        return cls              # just return driver class. 
+            raise InvalidSessionDriverException(
+                '%s not found in current driver implements ' % driver)
+        return cls              # just return driver class.
+
 
 class InvalidSessionDriverException(Exception):
     pass

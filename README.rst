@@ -34,7 +34,7 @@ Here is a simple "Hello, Session" example web app for Tornado with Torndsession.
 	        (r"/", MainHandler),
 	    ]
 	    settings = dict(
-	        debug = True,
+	        debug=True,
 	    )
 	    tornado.web.Application.__init__(self, handlers, **settings)
 
