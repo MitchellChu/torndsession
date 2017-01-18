@@ -3,6 +3,7 @@
 #
 # Copyright @ 2014 Mitchell Chu
 
+from sys import version
 import tornado.web
 import tornado.httpserver
 import tornado.ioloop
@@ -42,6 +43,7 @@ class MainHandler(SessionBaseHandler):
         else:
             current_value = int(current_value) + 1
         self.write('<br/> Current Value is: %d' % current_value)
+        self.write('<br/>Current Python Version: %s' % version)
         self.session["sv"] = current_value
 
 

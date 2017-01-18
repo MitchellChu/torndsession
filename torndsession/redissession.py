@@ -7,7 +7,7 @@ from __future__ import (absolute_import, division, print_function,
                         with_statement)
 
 from copy import copy
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from torndsession.driver import SessionDriver
 
@@ -15,7 +15,7 @@ import redis
 
 try:
     import cPickle as pickle    # py2
-except:
+except ImportError:
     import pickle               # py3
 
 

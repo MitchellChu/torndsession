@@ -10,6 +10,7 @@ import datetime
 
 from torndsession.driver import SessionDriver
 from torndsession.session import SessionConfigurationError
+from torndsession.compat import iteritems
 
 
 class MemorySession(SessionDriver):
@@ -60,8 +61,8 @@ class MemorySession(SessionDriver):
             del self._data_handler[session_id]
 
     def remove_expires(self):
-        for key, val in self._data_handler.items():
+        for key, val in iteritems(self._data_handler):
             now = datetime.datetime.utcnow()
             expires = val.get("__expires__", now)
-            if now > expires:
+            if now >= expires:
                 del self._data_handler[key]

@@ -6,18 +6,18 @@
 from __future__ import (absolute_import, division, print_function,
                         with_statement)
 
-import datetime
+from datetime import datetime
 import os
-import sys
+# import sys
 from os.path import exists, isdir, join
 
 from torndsession.driver import SessionDriver
 from torndsession.session import SessionConfigurationError
 
-utcnow = datetime.datetime.utcnow
+utcnow = datetime.utcnow
 try:
     import cPickle as pickle    #  py2
-except:
+except ImportError:
     import pickle               #  py3
 
 
@@ -25,10 +25,12 @@ class FileSession(SessionDriver):
     """
     System File to save session object.
     """
-    DEFAULT_SESSION_POSITION = './#_sessions'  #  default host is '#_sessions' directory which is in current directory.
+    #  default host is '#_sessions' directory which is in current directory.
+    DEFAULT_SESSION_POSITION = './#_sessions'
     """
     Session file default save position.
-    In a recommendation, you need give the host option.when host is missed, system will use this value by default.
+    In a recommendation, you need give the host option.
+    when host is missed, system will use this value by default.
 
     Additional @ Version: 1.1
     """
@@ -84,9 +86,8 @@ class FileSession(SessionDriver):
         for session_file in os.listdir(self.host):
             if session_file.startswith(self._prefix):
                 session_file = join(self.host, session_file)
-                f = open(session_file, 'rb')
-                session = pickle.load(f)
-                f.close()
+                with open(session_file, 'rb') as sfile:
+                    session = pickle.load(sfile)
                 expires = session.get('__expires__', now)
                 if expires <= now:
                     os.remove(session_file)

@@ -9,17 +9,17 @@ import torndsession
 
 try:
     from setuptools import setup
-except:
+except ImportError:
     from distutils.core import setup
 
 
 def read(*filenames, **kwargs):
-    encoding= kwargs.get('encoding', 'utf-8')
+    encoding = kwargs.get('encoding', 'utf-8')
     sep = kwargs.get('sep', '\n')
     buf = []
     for filename in filenames:
-        with io.open(filename, encoding=encoding) as f:
-            buf.append(f.read())
+        with io.open(filename, encoding=encoding) as des_f:
+            buf.append(des_f.read())
     return sep.join(buf)
 
 version = torndsession.version
@@ -33,7 +33,8 @@ setup(
     classifiers=[
         'License :: OSI Approved :: MIT License',
         'Topic :: Internet :: WWW/HTTP :: Session',
-        'Programming Language :: Python',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
         'Operating System :: OS Independent',

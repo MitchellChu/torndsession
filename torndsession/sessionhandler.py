@@ -3,7 +3,8 @@
 #
 # Copyright @ 2014 Mitchell Chu
 
-from __future__ import absolute_import, division, print_function, with_statement
+from __future__ import (absolute_import, division, print_function,
+                        with_statement)
 
 import tornado.web
 import torndsession.session
@@ -12,7 +13,7 @@ import torndsession.session
 class SessionBaseHandler(tornado.web.RequestHandler, torndsession.session.SessionMixin):
     """
     This is a tornado web request handler which is base on torndsession.
-    Generally, user must persistent session object with manual operation when force_persistence is False
+    Generally, user must persistent session object with manual operation when force_persistence is False.
     but when the handler is inherit from SessionBaseHandler, in your handler, you just need to add/update/delete session values, SessionBaseHandler will auto save it.
     """
 
