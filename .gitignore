@@ -3,8 +3,9 @@
 *.pyo
 *.so
 *.class
+.*
+!/.gitignore
 build/
 /dist/
 /torndsession.egg-info/
-.tox/
 /env/
