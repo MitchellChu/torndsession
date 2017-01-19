@@ -24,6 +24,8 @@ class Application(tornado.web.Application):
             driver_settings=dict(
                 host=self,
             ),
+            sid_name='torndsession-mem',  # default is msid.
+            session_lifetime=1800,  # default is 1200 seconds.
             force_persistence=True,
         )
         settings.update(session=session_settings)

@@ -6,8 +6,6 @@
 from __future__ import (absolute_import, division, print_function,
                         with_statement)
 
-import sys
-
 
 class SessionDriver(object):
     '''
@@ -43,7 +41,7 @@ class SessionDriverFactory(object):
         if not 'SessionDriver' in [base.__name__ for base in cls.__bases__]:
             raise InvalidSessionDriverException(
                 '%s not found in current driver implements ' % driver)
-        return cls              # just return driver class.
+        return cls
 
 
 class InvalidSessionDriverException(Exception):

@@ -6,7 +6,7 @@
 from __future__ import (absolute_import, division, print_function,
                         with_statement)
 
-import datetime
+from datetime import datetime
 
 from torndsession.driver import SessionDriver
 from torndsession.session import SessionConfigurationError
@@ -39,7 +39,15 @@ class MemorySession(SessionDriver):
         """
         get session object from host.
         """
-        return self._data_handler.get(session_id)
+        if session_id not in self._data_handler:
+            return {}
+
+        session_obj = self._data_handler[session_id]
+        now = datetime.utcnow()
+        expires = session_obj.get('__expires__', now)
+        if expires > now:
+            return session_obj
+        return {}
 
     def save(self, session_id, session_data, expires=None):
         """
@@ -48,8 +56,9 @@ class MemorySession(SessionDriver):
         system will auto to clear expired session data.
         after cleared, system will add current to session pool, however the pool is full.
         """
-        session_data = session_data if session_data else {}
-        session_data.update(__expires__=expires)
+        session_data = session_data or {}
+        if expires:
+            session_data.update(__expires__=expires)
         if len(self._data_handler) >= self.MAX_SESSION_OBJECTS:
             self.remove_expires()
         if len(self._data_handler) >= self.MAX_SESSION_OBJECTS:
@@ -62,7 +71,7 @@ class MemorySession(SessionDriver):
 
     def remove_expires(self):
         for key, val in iteritems(self._data_handler):
-            now = datetime.datetime.utcnow()
+            now = datetime.utcnow()
             expires = val.get("__expires__", now)
             if now >= expires:
                 del self._data_handler[key]

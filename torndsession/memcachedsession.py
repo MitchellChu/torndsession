@@ -6,7 +6,7 @@
 from __future__ import (absolute_import, division, print_function,
                         with_statement)
 
-import datetime
+from datetime import datetime
 import numbers
 from copy import copy
 
@@ -66,8 +66,8 @@ class MemcachedSession(SessionDriver):
     def __get_expires_seconds(self, expires):
         if isinstance(expires, numbers.Real):
             return int(expires)
-        elif isinstance(expires, datetime.datetime):
-            now = datetime.datetime.utcnow()
+        elif isinstance(expires, datetime):
+            now = datetime.utcnow()
             return int((expires - now).total_seconds())
         else:
             return 0

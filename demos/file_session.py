@@ -23,6 +23,8 @@ class Application(tornado.web.Application):
             driver_settings=dict(
                 host="#_sessions",
             ),
+            sid_name='torndsessionID',
+            session_lifetime=1800,
             force_persistence=True,
         )
         settings.update(session=session_settings)

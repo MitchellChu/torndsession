@@ -28,36 +28,48 @@ Here is a simple "Hello, Session" example web app for Tornado with Torndsession.
     import tornado.ioloop
     import torndsession
 
+
     class Application(tornado.web.Application):
         def __init__(self):
-	    handlers = [
-	        (r"/", MainHandler),
-	    ]
-	    settings = dict(
-	        debug=True,
-	    )
-	    tornado.web.Application.__init__(self, handlers, **settings)
+            handlers = [
+                (r"/", MainHandler),
+            ]
+            settings = dict(
+                debug=True,
+            )
+            # sid_name, lifetime added in 1.1.5.0
+            # sid_name: the name of session id in cookies.
+            # lifetime: session default expires seconds.
+            session_settings = dict(
+                driver='memory',
+                driver_settings={'host': self},
+                force_persistence=True,
+                sid_name='torndsessionID',
+                lifetime=1800
+            ),
+            settings.update(session=session_settings)
+            tornado.web.Application.__init__(self, handlers, **settings)
+
 
     class MainHandler(torndsession.sessionhandler.SessionBaseHandler):
         def get(self):
-	    self.write("Hello, Session.<br/>")
-	    if 'data' in self.session:
-	        data = self.session['data']
-	    else:
-	        data = 0
-	    self.write('data=%s' % data)
-	    self.session["data"] = data + 1
+            self.write("Hello, Session.<br/>")
+            if 'data' in self.session:
+                data = self.session['data']
+            else:
+                data = 0
+            self.write('data=%s' % data)
+            self.session["data"] = data + 1
 
 
     def main():
-	http_server = tornado.httpserver.HTTPServer(Application())
-	http_server.listen(8000)
-	tornado.ioloop.IOLoop.instance().start()
+        http_server = tornado.httpserver.HTTPServer(Application())
+        http_server.listen(8000)
+        tornado.ioloop.IOLoop.instance().start()
+
 
     if __name__ == "__main__":
-	main()
-
-
+        main()
 
 
 In this example, Request handler obtain memory session feature, it just inherit from SessionBaseHandler. more session example see `torndsession demos <https://github.com/MitchellChu/torndsession/tree/master/demos>`_.
@@ -74,6 +86,14 @@ Installation
 
 Torndsession is listed in `PyPI <https://pypi.python.org/pypi/torndsession>`__ and can be installed with `pip` or `easy_install`. Note that this installation can not install demos applicatinos which be included in source code.
 
+The another way is use `git+` install torndsession from github.
+
+::
+
+    pip install git+https://github.com/mitchellchu/torndsession
+
+
+
 **Manual installation**:
 
 In this way, you need download the source from `PyPI <https://pypi.python.org/pypi/torndsession>`__.::
@@ -83,11 +103,25 @@ In this way, you need download the source from `PyPI <https://pypi.python.org/py
     python setup.py build
     sudo python setup.py install
 
+
 The Torndsession source code is hosted on `GitHub <https://github.com/MitchellChu/torndsession>`_.
 
 
 Updated
 =======
+
+Torndsession 1.1.5:
+
+- fixed bug in 1.1.4
+- default session id value generator changed. see `#ISSUE 12# <https://github.com/MitchellChu/torndsession/issues/12>`_.
+- added two custom key in settings.
+
+  - sid_name: session's cookie name.
+  - lifetime: default expired seconds for session.
+
+Torndsession 1.1.4:
+
+- fixed bug
 
 Torndsession 1.1.3 fixed some bug and supported python 3.x.
 

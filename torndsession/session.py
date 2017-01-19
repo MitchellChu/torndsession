@@ -7,10 +7,20 @@
 from __future__ import (absolute_import, division, print_function,
                         with_statement)
 
-import datetime
-from uuid import uuid4
+from datetime import datetime, timedelta
+# from uuid import uuid4
+from os import urandom
+from binascii import b2a_base64
 
 from torndsession.driver import SessionDriverFactory
+from torndsession.compat import _xrange
+
+l = [c for c in map(chr, _xrange(256))]
+l[47] = '-'
+l[43] = '_'
+l[61] = '.'
+_smap = str('').join(l)
+del l
 
 
 class SessionManager(object):
@@ -19,20 +29,22 @@ class SessionManager(object):
     DEFAULT_SESSION_LIFETIME = 1200 # seconds
 
     def __init__(self, handler):
-        self._default_session_lifetime = datetime.datetime.utcnow() + datetime.timedelta(
-            seconds=self.DEFAULT_SESSION_LIFETIME)
         self.handler = handler
-        self.settings = {}       # session configurations
+        self.settings = {}
+        self.__init_settings()
+        self._default_session_lifetime = datetime.utcnow() + timedelta(
+            seconds=self.settings.get('session_lifetime', self.DEFAULT_SESSION_LIFETIME))
         self._expires = self._default_session_lifetime
         self._is_dirty = True
         self.__init_session_driver()
         self.__init_session_object() # initialize session object
 
     def __init_session_object(self):
-        session_id = self.handler.get_cookie(self.SESSION_ID)
+        cookiename = self.settings.get('sid_name', self.SESSION_ID)
+        session_id = self.handler.get_cookie(cookiename)
         if not session_id:
-            session_id = uuid4().hex
-            self.handler.set_cookie(self.SESSION_ID,
+            session_id = self._generate_session_id(30)
+            self.handler.set_cookie(cookiename,
                                     session_id,
                                     **self.__session_settings())
             self._is_dirty = True
@@ -49,8 +61,8 @@ class SessionManager(object):
             expires = cookie_config.get("expires")
             expires_days = cookie_config.get("expires_days")
             if expires_days is not None and not expires:
-                expires = datetime.datetime.utcnow() + datetime.timedelta(days=expires_days)
-            if expires and isinstance(expires, datetime.datetime):
+                expires = datetime.utcnow() + timedelta(days=expires_days)
+            if expires and isinstance(expires, datetime):
                 self._expires = expires
         self._expires = self._expires if self._expires else self._default_session_lifetime
         self._id = session_id
@@ -59,7 +71,6 @@ class SessionManager(object):
         """
         setup session driver.
         """
-        self.__init_settings()
 
         driver = self.settings.get("driver")
         if not driver:
@@ -81,26 +92,6 @@ class SessionManager(object):
         else:
             session_driver = SessionDriverFactory.create_driver(driver, **driver_settings)
         self.driver = session_driver(**driver_settings) # create session driver instance.
-
-    def __get_session_driver(self):
-        driver_name = self.settings.get("driver")
-        cache_driver = self.settings.get("cache_driver", True)
-        driver_settings = self.settings.get("driver_settings", {})
-        if cache_driver:
-            cache_name = '__cached_session_driver'
-            if not hasattr(self.handler.application, cache_name):
-                if not driver_name:
-                    raise SessionConfigurationError('driver missed')
-                if not driver_settings:
-                    raise SessionConfigurationError('driver settings missed.')
-                setattr(
-                    self.handler.application,
-                    cache_name,
-                    SessionDriverFactory.create_driver(driver_name, **driver_settings))
-            driver = getattr(self.handler.application, cache_name)
-        else:
-            driver = SessionDriverFactory.create_driver(driver_name, **driver_settings)
-        return driver
 
     def __init_settings(self):
         """
@@ -141,10 +132,26 @@ class SessionManager(object):
                 driver_settings={'host': self.handler.application},
                 force_persistence=True,
                 cache_driver=True)
-        driver = session_settings.get("driver")
-        if not driver:
-            raise SessionConfigurationError('driver is missed')
+        # driver = session_settings.get("driver")
+        # if not driver:
+        #     raise SessionConfigurationError('driver is missed')
         self.settings = session_settings
+
+    def _generate_session_id(self, blength=24):
+        """generate session id
+
+            Implement: https://github.com/MitchellChu/torndsession/issues/12
+
+            :arg int blength: give the bytes to generate.
+            :return string: session string
+
+            .. versionadded:: 1.1.5
+        """
+        session_id = (b2a_base64(urandom(blength)))[:-1]
+        if isinstance(session_id, str):
+            # PY2
+            return session_id.translate(_smap)
+        return session_id.decode('utf-8').translate(_smap)
 
     def _get_session_object_from_driver(self, session_id):
         """
@@ -230,26 +237,11 @@ class SessionManager(object):
             self.__init_session_object()
         return self._expires
 
-    # def __generate_session_id(self):
-    #     """
-    #     Generate unique session id by uuid4
-    #     """
-    #     session_id = uuid4().hex
-    #     self.handler.set_cookie(self.SESSION_ID,
-    #                             session_id,
-    #                             **self.__session_settings())
-    #     return session_id
-
     def __session_settings(self):
         session_settings = self.settings.get('cookie_config', {})
         session_settings.setdefault('expires', None)
         session_settings.setdefault('expires_days', None)
         return session_settings
-
-    # def __retrieve_current_session_id(self):
-    #     session_id = self.handler.get_cookie(self.SESSION_ID)
-    #     if session_id:return session_id
-    #     return self.__generate_session_id()
 
 
 class SessionMixin(object):

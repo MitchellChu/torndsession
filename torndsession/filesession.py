@@ -8,7 +8,6 @@ from __future__ import (absolute_import, division, print_function,
 
 from datetime import datetime
 import os
-# import sys
 from os.path import exists, isdir, join
 
 from torndsession.driver import SessionDriver
@@ -62,7 +61,7 @@ class FileSession(SessionDriver):
 
         now = utcnow()
         expires = session.get('__expires__', now)
-        if expires >= now:
+        if expires > now:
             return session
         return {}
 
@@ -70,8 +69,8 @@ class FileSession(SessionDriver):
         session_file = join(self.host, self._prefix + session_id)
         session_data = session_data if session_data else {}
 
-        if not expires:
-            session_data.update("__expires__", expires)
+        if expires:
+            session_data.update(__expires__=expires)
         with open(session_file, 'wb') as wf:
             pickle.dump(session_data, wf)
 

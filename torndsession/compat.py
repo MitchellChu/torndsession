@@ -17,7 +17,7 @@ if PY3:
     string_types = (str, )
     integer_types = int
     izip = zip
-    xrange = range
+    _xrange = range
     MAXSIZE = sys.maxsize
 
     def iteritems(o):
@@ -39,6 +39,7 @@ else:
     string_types = (basestring, )
     integer_types = (int, long)
     from itertools import izip
+    _xrange = xrange
     MAXSIZE = sys.maxint
 
     def b(s):
