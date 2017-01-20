@@ -7,5 +7,5 @@
 
 from __future__ import absolute_import, division, print_function, with_statement
 
-version = "1.1.5"
-version_info = (1, 1, 5, 0)
+version = "1.1.5.1"
+version_info = (1, 1, 5, 1)
