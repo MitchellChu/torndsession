@@ -45,7 +45,7 @@ Here is a simple "Hello, Session" example web app for Tornado with Torndsession.
                 driver_settings={'host': self},
                 force_persistence=True,
                 sid_name='torndsessionID',
-                lifetime=1800
+                session_lifetime=1800
             ),
             settings.update(session=session_settings)
             tornado.web.Application.__init__(self, handlers, **settings)
@@ -117,7 +117,7 @@ Torndsession 1.1.5:
 - added two custom key in settings.
 
   - sid_name: session's cookie name.
-  - lifetime: default expired seconds for session.
+  - session_lifetime: default expired seconds for session.
 
 Torndsession 1.1.4:
 

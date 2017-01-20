@@ -132,9 +132,6 @@ class SessionManager(object):
                 driver_settings={'host': self.handler.application},
                 force_persistence=True,
                 cache_driver=True)
-        # driver = session_settings.get("driver")
-        # if not driver:
-        #     raise SessionConfigurationError('driver is missed')
         self.settings = session_settings
 
     def _generate_session_id(self, blength=24):
